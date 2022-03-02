@@ -156,11 +156,9 @@ const app = {
         playBtn.onclick = function () {
             if (_this.isPlaying) {
                 audio.pause()
-                cdThumbAnimate.pause()
             }
             else {
                 audio.play()
-                cdThumbAnimate.play()
             }
         }
         // Next Song
@@ -178,12 +176,14 @@ const app = {
         audio.onplay = function () {
             _this.isPlaying = true
             player.classList.add('playing')
+            cdThumbAnimate.play()
         }
 
         // Khi pause
         audio.onpause = function () {
             _this.isPlaying = false
             player.classList.remove('playing')
+            cdThumbAnimate.pause()
         }
 
         // Chạy progress
