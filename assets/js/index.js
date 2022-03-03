@@ -11,10 +11,13 @@ const playBtn = $('.btn-toggle-play');
 const progress = $('#progress');
 const btnNext = $('.btn-next');
 const btnPrev = $('.btn-prev');
+const btnRandom = $('.btn-random');
 const app = {
 
     currentIndex: 0,
     isPlaying: false,
+    isRandom: false,
+    isRepeat: false,
     songs: [
         {
             name: "3107",
@@ -163,12 +166,22 @@ const app = {
         }
         // Next Song
         btnNext.onclick = function () {
-            _this.nextSong()
+            if (_this.isRandom) {
+                _this.playRandomSong()
+            }
+            else {
+                _this.nextSong()
+            }
             audio.play()
         }
         // Prev Song
         btnPrev.onclick = function () {
-            _this.prevSong()
+            if (_this.isRandom) {
+                _this.playRandomSong()
+            }
+            else {
+                _this.prevSong()
+            }
             audio.play()
         }
         // Khi play
@@ -198,8 +211,20 @@ const app = {
             audio.currentTime = seekTime;
         }
 
+        // Random click event
+        btnRandom.onclick = function (e) {
+            _this.isRandom = !_this.isRandom
+            btnRandom.classList.toggle('active', _this.isRandom)
+        }
     },
-
+    playRandomSong: function () {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newIndex === this.currentIndex);
+        this.currentIndex = newIndex;
+        this.loadCurrentSong();
+    },
     nextSong: function () {
         if (this.currentIndex++ >= this.songs.length - 1) {
             this.currentIndex = 0;
@@ -208,7 +233,7 @@ const app = {
     },
     prevSong: function () {
         if (this.currentIndex-- <= 0) {
-            this.currentIndex = this.songs.length-1;
+            this.currentIndex = this.songs.length - 1;
         }
         this.loadCurrentSong()
     },
